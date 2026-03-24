@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Container,
   Typography,
@@ -8,11 +8,13 @@ import {
   Select,
   InputLabel,
   MenuItem,
+  FormHelperText,
   Box,
   CircularProgress,
 } from "@mui/material";
-import { months, years } from "../constants";
-import { getAllRewards } from "../services/rewardsPoints";
+import { months, years, mockData } from "../constants";
+import { getAllRewards, getThreeMonthRewards } from "../services/rewardsPoints";
+import { DataContext } from "../Components/contexts";
 
 const Home = () => {
   const [month, setMonth] = useState("");
@@ -20,6 +22,20 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [goProgress, setGoProgress] = useState(false);
   const [allProgress, setAllProgress] = useState(false);
+  const [error, setError] = useState(false);
+  const { resultData, setResultData } = useContext(DataContext);
+
+  useEffect(() => {
+    if (parseInt(month) > 10 && parseInt(year) > 2024) {
+      if (!error) {
+        setError(true);
+      }
+    } else {
+      if (error) {
+        setError(false);
+      }
+    }
+  }, [month, year]);
 
   const renderMonths = () => {
     return months.map((item) => {
@@ -48,18 +64,20 @@ const Home = () => {
       setMonth(value);
     } else if (name === "year") {
       setYear(value);
-    } else return;
+    }
   };
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async (e) => {
     const { name } = e.target;
     setLoading(true);
     if (name === "periodButton") {
       setGoProgress(true);
+      const rewards = await getThreeMonthRewards(mockData, month, year);
+      setResultData(rewards);
     } else if (name === "allButton") {
       setAllProgress(true);
-      const rewards = await getAllRewards();
-      console.log(rewards);
+      const rewards = await getAllRewards(mockData);
+      setResultData(rewards);
     }
   };
 
@@ -87,7 +105,7 @@ const Home = () => {
             </Grid>
             <Grid container className="w-full">
               <Grid className="grow">
-                <FormControl fullWidth>
+                <FormControl fullWidth error={error}>
                   <InputLabel id="monthSelect">Month</InputLabel>
                   <Select
                     labelId="monthSelect"
@@ -98,10 +116,13 @@ const Home = () => {
                   >
                     {renderMonths()}
                   </Select>
+                  {error && (
+                    <FormHelperText>Not a 3 month period</FormHelperText>
+                  )}
                 </FormControl>
               </Grid>
               <Grid className="grow">
-                <FormControl fullWidth>
+                <FormControl fullWidth error={error}>
                   <InputLabel id="yearSelect">Year</InputLabel>
                   <Select
                     labelId="yearSelect"
@@ -122,7 +143,7 @@ const Home = () => {
                   variant="contained"
                   size="large"
                   color="info"
-                  disabled={loading || !month || !year}
+                  disabled={loading || !month || !year || error}
                   onClick={handleSubmit}
                 >
                   Go
