@@ -1,4 +1,4 @@
-const mockData = [
+export const mockData = [
   { name: "Liam Johnson", date: "2024-02-14", total: "$182.45" },
   { name: "Emma Davis", date: "2025-01-03", total: "$74.21" },
   { name: "Noah Smith", date: "2024-11-22", total: "$305.67" },
@@ -94,5 +94,22 @@ const mockData = [
   { name: "Jordan Graham", date: "2024-08-20", total: "$155.55" },
   { name: "Allison Sullivan", date: "2025-12-15", total: "$91.11" },
   { name: "Brian Wallace", date: "2024-03-29", total: "$280.00" },
-  { name: "Kaylee Woods", date: "2025-01-12", total: "$49.49" }
+  { name: "Kaylee Woods", date: "2025-01-12", total: "$49.49" },
 ];
+
+export const months = [
+  { name: "January", value: "01" },
+  { name: "February", value: "02" },
+  { name: "March", value: "03" },
+  { name: "April", value: "04" },
+  { name: "May", value: "05" },
+  { name: "June", value: "06" },
+  { name: "July", value: "07" },
+  { name: "August", value: "08" },
+  { name: "September", value: "09" },
+  { name: "October", value: "10" },
+  { name: "November", value: "11" },
+  { name: "December", value: "12" },
+];
+
+export const years = ["2024", "2025"];

@@ -1,12 +1,15 @@
-import { useState } from "react";
+import { Routes, Route } from "react-router";
 import "./App.css";
+import Home from "./Pages/Home";
+import Result from "./Pages/Result";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
     <div className="min-h-screen mini-w-screen bg-blue-400">
-      Helo worlkd!
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/result" element={<Result />} />
+      </Routes>
     </div>
   );
 }
