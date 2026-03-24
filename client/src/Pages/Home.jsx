@@ -12,6 +12,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { months, years } from "../constants";
+import { getAllRewards } from "../services/rewardsPoints";
 
 const Home = () => {
   const [month, setMonth] = useState("");
@@ -50,13 +51,15 @@ const Home = () => {
     } else return;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     const { name } = e.target;
     setLoading(true);
     if (name === "periodButton") {
       setGoProgress(true);
     } else if (name === "allButton") {
       setAllProgress(true);
+      const rewards = await getAllRewards();
+      console.log(rewards);
     }
   };
 
@@ -125,7 +128,15 @@ const Home = () => {
                   Go
                 </Button>
                 {goProgress && (
-                  <CircularProgress size={30} sx={{ color: "white", position: "absolute", top: "12%", left: "30%" }} />
+                  <CircularProgress
+                    size={30}
+                    sx={{
+                      color: "white",
+                      position: "absolute",
+                      top: "12%",
+                      left: "30%",
+                    }}
+                  />
                 )}
               </Box>
             </Grid>
@@ -143,7 +154,15 @@ const Home = () => {
               Show me all records
             </Button>
             {allProgress && (
-              <CircularProgress size={30} sx={{ color: "white", position: "absolute", top: "10%", left: "42%" }} />
+              <CircularProgress
+                size={30}
+                sx={{
+                  color: "white",
+                  position: "absolute",
+                  top: "10%",
+                  left: "42%",
+                }}
+              />
             )}
           </Box>
         </Grid>
