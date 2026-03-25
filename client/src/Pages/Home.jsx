@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router";
 import {
   Container,
   Typography,
@@ -24,6 +25,7 @@ const Home = () => {
   const [allProgress, setAllProgress] = useState(false);
   const [error, setError] = useState(false);
   const { resultData, setResultData } = useContext(DataContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (parseInt(month) > 10 && parseInt(year) > 2024) {
@@ -67,17 +69,27 @@ const Home = () => {
     }
   };
 
+  const convertToArray = (obj) => {
+    const keys = Object.keys(obj);
+    return keys.map((key) => {
+      const value = obj[key];
+      return { ...value, name: key };
+    });
+  };
+
   const handleSubmit = async (e) => {
     const { name } = e.target;
     setLoading(true);
     if (name === "periodButton") {
       setGoProgress(true);
       const rewards = await getThreeMonthRewards(mockData, month, year);
-      setResultData(rewards);
+      setResultData(convertToArray(rewards));
+      navigate("/result");
     } else if (name === "allButton") {
       setAllProgress(true);
       const rewards = await getAllRewards(mockData);
-      setResultData(rewards);
+      setResultData(convertToArray(rewards));
+      navigate("/result");
     }
   };
 
